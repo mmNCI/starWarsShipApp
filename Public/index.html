@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ships of the Star Wars Saga</title>
+</head>
+<body>
+  <h1>Ships</h1>
+  <ul id="ship-list"></ul>
+
+  <form id="ship-form">
+    <input type="text" id="shipName" placeholder="Name:" required />
+    <input type="text" id="shipType" placeholder="Type:" required />
+    <input type="text" id="shipFaction" placeholder="Faction:" required />
+    <input type="text" id="firstAppeared" placeholder="First Appeared:" required />
+    <button type="submit">Add</button>
+  </form>
+
+  <script>
+    const list = document.getElementById('ship-list');
+    const form = document.getElementById('ship-form');
+
+    function fetchShips() {
+      fetch('/ships')
+        .then(res => res.json())
+        .then(ships => {
+          list.innerHTML = '';
+          ships.forEach(ship => {
+            const li = document.createElement('li');
+            li.textContent = `${ship.shipName} (${ship.shipValue})`;
+            list.appendChild(li);
+          });
+        });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const sName = document.getElementById('shipName').value;
+      const sType = document.getElementById('shipType').value;
+      const sFaction = document.getElementById('shipFaction').value;
+      const sAppeared = document.getElementById('firstAppeared').value;
+
+      fetch('/ships', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sName, sType,sFaction,sAppeared})
+      }).then(() => {
+        form.reset();
+        fetchItems();
+      });
+    });
+
+    function deleteShip(id) {
+      fetch(`/ships/${id}`, {
+        method: 'DELETE'
+      }).then(() => fetchShips());
+    }
+
+    function showUpdateForm(id, currentShipName, currentShipType, currentShipFaction, currentFirstAppeared) {
+      const sName = prompt('Update ship name:', currentShipName);
+      const sType = prompt('Update ship type:', currentShipType);
+      const sFaction = prompt('Update ship faction:', currentShipFaction);
+      const sAppeared = prompt('Update ship first appearence:', currentFirstAppeared);
+
+      if (sName && sType && sFaction && sAppeared !== null) {
+        fetch(`/ships/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sName, sType, sFaction,sAppeared })
+        }).then(() => fetchShips());
+      }
+    }
+
+
+    fetchShips();
+  </script>
+</body>
+</html>

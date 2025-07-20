@@ -1,16 +1,15 @@
-let mysql = require('mysql');
+const sqlite3 = require('sqlite3');
 
-let con = mysql.createConnection({
-    host: "localhost",
-    user: "yourusername",
-    password: "yourpassword"
-});
+const myDB = new sqlite3.Database("./", (err) => {
+    if (err) {
+        return console.log(err)
+    }
+    console.log("connection established")
+})
 
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-    con.query("CREATE DATABASE mydb", function (err, result) {
-        if (err) throw err;
-        console.log("Database created");
-    });
-});
+myDB.close((err) => {
+    if (err) {
+        return console.log(err)
+    }
+    console.log("connection closed")
+})
