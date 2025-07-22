@@ -8,5 +8,6 @@ pm2 stop starWarsShipApp
 cd starWarsShipApp
 
 npm install
-
+echo $PRIVATE_KEY > privatekey.pem
+echo $SERVER > server.crt
 pm2 start ./bin/www --name starWarsShipApp
