@@ -25,13 +25,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: check-sudo
+          command: which sudo
+      - run:
           name: update-npm
-          command: apt-get update
+          command: sudo apt-get update
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json"}}
       - run:
           name: install-npm
-          command: npm install
+          command: sudo npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json"}}
           paths:
