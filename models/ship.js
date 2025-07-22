@@ -1,11 +1,23 @@
 const db = require('../db');
 
 exports.create = (name, shipType, faction, appeared, callback) => {
-    db.run(
-        `INSERT INTO items (name, shipType, faction, appeared) VALUES (?, ?, ?, ?)`,
-        [name, shipType, faction, appeared],
+    const sql = `INSERT INTO items (name, shipType, faction, appeared) VALUES (?, ?, ?, ?)`;
+    const params = [name, shipType, faction, appeared];
+    db.run(sql, params,
         function (err) {
             callback(err, this?.lastID);
         }
     );
+};
+
+exports.update = function (id, name, shipType, faction, appeared, callback) {
+    const sql = `UPDATE ships SET name = ?, shipType = ?, faction = ?, appeared = ? WHERE id = ?`;
+    const params = [name, shipType, faction, appeared, id];
+    db.run(sql, params, function (err) {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, { changes: this.changes });
+        }
+    });
 };

@@ -46,11 +46,11 @@
                   First Appearance: ${ship.appeared}<br>
                   <button onclick="deleteShip(${ship.id})">Delete</button>
                   <button onclick="showUpdateForm(
-                              ${ship.id},
+                              '${ship.id}',
                               '${ship.name}',
-                              ${ship.shipType},
+                              '${ship.shipType}',
                               '${ship.faction}',
-                              ${ship.appeared})">Update</button>
+                              '${ship.appeared}')">Update</button>
                   `;
             shipList.appendChild(li);
           });
@@ -91,17 +91,18 @@
     }
 
     function showUpdateForm(id, currentShipName, currentShipType, currentShipFaction, currentFirstAppeared) {
-      const newName = prompt('Update ship name:', currentShipName);
-      const newType = prompt('Update ship type:', currentShipType);
-      const newFaction = prompt('Update ship faction:', currentShipFaction);
-      const newAppeared = prompt('Update ship first appearence:', currentFirstAppeared);
+      const name = prompt('Update ship name:', currentShipName);
+      const shipType = prompt('Update ship type:', currentShipType);
+      const faction = prompt('Update ship faction:', currentShipFaction);
+      const appeared = prompt('Update ship first appearence:', currentFirstAppeared);
 
-      if (newName && newType && newFaction && newAppeared !== null) {
+      if (name && shipType && faction && appeared !== null) {
         fetch(`/ships/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ newName, newType, newFaction, newAppeared })
-        }).then(() => fetchShips());
+          body: JSON.stringify({ name, shipType, faction, appeared })
+        })
+        .then(() => fetchShips());
       }
     }
 

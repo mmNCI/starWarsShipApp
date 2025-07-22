@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const ship = require('../models/ship');
+//const { descriptors } = require('chart.js/dist/core/core.defaults');
 
 // GET all ships
 router.get('/', (req, res) => {
@@ -39,14 +41,19 @@ router.post('/', (req, res) => {
 
 // PUT update an item
 router.put('/:id', (req, res) => {
+    const id = req.params.id;
     const { name, shipType, faction, appeared } = req.body;
+    console.log('Update request:', { id, name, shipType, faction, appeared });
     //const { id } = req.params;
-    const sql = 'UPDATE ships SET name = ? SET shipType= ? SET faction= ? SET appeared= ? WHERE id = ?';
-    db.run(sql, [name, shipType, faction, appeared, id], function (err) {
-        if (err) return res.status(500).json({ error: err.message });
-        if (this.changes === 0) return res.status(404).json({ error: 'Ship not found' });
-        res.json({ message: 'Ship updated' });
-    });
+    //const sql = 'UPDATE ships SET name = ? SET shipType= ? SET faction= ? SET appeared= ? WHERE id = ?';
+    ship.update(id, name, shipType, faction, appeared, (err, result) => {
+        if (err) {
+            console.error('DB error:', err);
+            res.status(500).json({ error: 'Update failed' })
+        } else {
+            res.json({ message: 'Ship updated', result })
+        }
+    })
 });
 
 // DELETE an item
