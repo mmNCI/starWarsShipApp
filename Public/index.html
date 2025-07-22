@@ -1,72 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8" />              
   <title>Ships of the Star Wars Saga</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Ships</h1>
-  <ul id="ship-list"></ul>
-
-  <form id="ship-form">
-    <input type="text" id="shipName" placeholder="Name:" required />
-    <input type="text" id="shipType" placeholder="Type:" required />
-    <input type="text" id="shipFaction" placeholder="Faction:" required />
-    <input type="text" id="firstAppeared" placeholder="First Appeared:" required />
-    <button type="submit">Add</button>
-  </form>
-
+  <h1 class="mainTitle">Ships of the STAR WARS Saga</h1>
+  
+  <section class="form">
+    <form id="shipForm">
+      <label>Name:</label>
+      <input type="text" id="name" placeholder="Name:" required /><br/>
+      <label>Class:</label>
+      <input type="text" id="shipType" placeholder="Type:" required /><br/>
+      <label>Faction:</label>
+      <input type="text" id="faction" placeholder="Faction:" required /><br/>
+      <label>First Appeared:</label>
+      <input type="text" id="appeared" placeholder="First Appeared:" required /><br/>
+      <button type="submit">Add</button>
+    </form>
+  </section>
+  <section class="list">
+  <ul id="shipList"></ul>
+  </section>
   <script>
-    const list = document.getElementById('ship-list');
-    const form = document.getElementById('ship-form');
+    const list = document.getElementById('shipList');
+    const form = document.getElementById('shipForm');
 
     function fetchShips() {
       fetch('/ships')
         .then(res => res.json())
         .then(ships => {
+          console.log("Raw data:",ships);
+          console.log("Is array: ",Array.isArray(ships));
           list.innerHTML = '';
           ships.forEach(ship => {
+            
             const li = document.createElement('li');
-            li.textContent = `${ship.shipName} (${ship.shipValue})`;
-            list.appendChild(li);
+            li.className="listItem";
+            li.innerHTML = `
+                  <strong>${ship.name}</strong><br>
+                  Class: ${ship.shipType}<br>
+                  Faction: ${ship.faction}<br>
+                  First Appearance: ${ship.appeared}<br>
+                  <button onclick="deleteShip(${ship.id})">Delete</button>
+                  <button onclick="showUpdateForm(
+                              ${ship.id},
+                              '${ship.name}',
+                              ${ship.shipType},
+                              '${ship.faction}',
+                              ${ship.appeared})">Update</button>
+                  `;
+            shipList.appendChild(li);
           });
         });
     }
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const sName = document.getElementById('shipName').value;
-      const sType = document.getElementById('shipType').value;
-      const sFaction = document.getElementById('shipFaction').value;
-      const sAppeared = document.getElementById('firstAppeared').value;
+      const name = document.getElementById('name').value;
+      const shipType = document.getElementById('shipType').value;
+      const faction = document.getElementById('faction').value;
+      const appeared = document.getElementById('appeared').value;
 
       fetch('/ships', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sName, sType,sFaction,sAppeared})
-      }).then(() => {
-        form.reset();
-        fetchItems();
-      });
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({name, shipType, faction, appeared})
+      })
+        .then(res =>res.json()) 
+        .then(ships=>{
+          console.log('Added:',ships);
+          form.reset();
+          fetchShips();
+        })
+        .catch(err => console.error(err));
+     
     });
 
     function deleteShip(id) {
       fetch(`/ships/${id}`, {
-        method: 'DELETE'
-      }).then(() => fetchShips());
+        method: 'DELETE',
+      })
+      .then (res =>res.json())
+      .then(() => fetchShips())
+      .catch(err => console.error('Delete error: ', err))
     }
 
     function showUpdateForm(id, currentShipName, currentShipType, currentShipFaction, currentFirstAppeared) {
-      const sName = prompt('Update ship name:', currentShipName);
-      const sType = prompt('Update ship type:', currentShipType);
-      const sFaction = prompt('Update ship faction:', currentShipFaction);
-      const sAppeared = prompt('Update ship first appearence:', currentFirstAppeared);
+      const newName = prompt('Update ship name:', currentShipName);
+      const newType = prompt('Update ship type:', currentShipType);
+      const newFaction = prompt('Update ship faction:', currentShipFaction);
+      const newAppeared = prompt('Update ship first appearence:', currentFirstAppeared);
 
-      if (sName && sType && sFaction && sAppeared !== null) {
+      if (newName && newType && newFaction && newAppeared !== null) {
         fetch(`/ships/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sName, sType, sFaction,sAppeared })
+          body: JSON.stringify({ newName, newType, newFaction, newAppeared })
         }).then(() => fetchShips());
       }
     }

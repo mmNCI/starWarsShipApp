@@ -1,0 +1,25 @@
+body{
+    background-color: rgb(33, 31, 29);
+}
+.mainTitle{
+    color: #c6c6c6;
+}
+.form{
+    background-color: aqua;
+    padding-left:  20px;
+    padding-bottom: 10px;
+    width: 250px;
+}
+
+
+.list{
+    background-color: tomato;
+    float: left;
+}
+.listItem{
+    padding-left:  20px;
+    padding-bottom: 10px;
+    background-color: rgb(120, 120, 120);
+    list-style-type: none;
+    float:left;
+}
