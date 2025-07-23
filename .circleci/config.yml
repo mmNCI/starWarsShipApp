@@ -24,6 +24,7 @@ jobs:
       - image: cimg/node:20.11
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: check-sudo
           command: which sudo
