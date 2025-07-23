@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "mocha",
-    "test:integration": "jest --test/integration/*.js",
+    "test:integration": "jest --detectOpenHandles --test/integration/.*\\.js",
     "dev": "nodemon ./bin/www"
   },
   "keywords": [],
