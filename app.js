@@ -15,7 +15,7 @@ app.use('/ships', shipsRouter);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'index.html'));
 })
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('Running at http://localhost:${PORT}'));
+//const PORT = process.env.PORT || 3000;
+//app.listen(PORT, () => console.log('Running at http://localhost:${PORT}'));
 // hello world
 module.exports = app;
