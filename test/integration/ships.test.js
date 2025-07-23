@@ -9,7 +9,8 @@ describe('GET /ships', () => {
         expect(Array.isArray(res.body)).toBe(true);
     });
 });
-afterAll(async () => {
-    await db.close();
+
+afterAll(() => {
+    db.close();
 });
 
