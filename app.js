@@ -6,6 +6,12 @@ app.use(express.static('public')); // serves index.html
 app.use(express.json());
 app.use('/ships', shipsRouter);
 
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+})
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Running at http://localhost:${PORT}'));
 // hello world
