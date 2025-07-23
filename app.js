@@ -4,11 +4,11 @@ const shipsRouter = require('./routes/ships');
 
 app.use(express.static('public')); // serves index.html
 app.use(express.json());
-app.use('/ships', shipsRouter);
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('/ships', shipsRouter);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 })
