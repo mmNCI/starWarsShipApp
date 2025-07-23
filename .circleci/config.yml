@@ -73,7 +73,7 @@ jobs:
           command: sudo npm install
       - run:
           name: test-run
-          command: sudo npm run test
+          command: sudo npm test
   deploy:
     docker:
       - image: cimg/node:20.11
