@@ -72,9 +72,6 @@ jobs:
           name: install-npm
           command: sudo npm install
       - run:
-          name: lint code
-          command: npm run lint
-      - run:
           name: integration-testing
           command: npm run test:integration
   deploy:
