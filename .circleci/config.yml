@@ -72,7 +72,7 @@ jobs:
           name: install-npm
           command: sudo npm install
       - run:
-          name: test-run
+          name: integration-testing
           command: npm run test:integration
   deploy:
     docker:
