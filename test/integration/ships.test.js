@@ -28,7 +28,7 @@ describe('POST /ships', () => {
         expect(res.body.shipType).toBe(newShip.shipType);
         expect(res.body.faction).toBe(newShip.faction);
         expect(res.body.appeared).toBe(newShip.appeared);
-        console.log('Record id: ', /ships/0);
+
     });
 });
 
