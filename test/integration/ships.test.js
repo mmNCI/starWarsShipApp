@@ -53,7 +53,7 @@ describe('PUT /ships/:id', () => {
 describe('DELETE /ships/:id', () => {
     it('should delete ship', async () => {
 
-        const res = await request(app).delete('/ships/1');
+        const res = await request(app).delete('/ships/0');
 
         expect(res.statusCode).toBe(200);
         expect(res.body.message).toMatch(/deleted/i);
