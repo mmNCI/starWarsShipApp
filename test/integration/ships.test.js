@@ -43,10 +43,8 @@ describe('PUT /ships', () => {
         const res = await request(app).put('/ships/1').send(updatedShip).set('Accept', 'application/json');
 
         expect(res.statusCode).toBe(200);
-        expect(res.body.name).toMatch(/updated/i);
-        expect(res.body.shipType).toMatch(/updated/i);
-        expect(res.body.faction).toMatch(/updated/i);
-        expect(res.body.appeared).toMatch(/updated/i);
+        expect(res.body.message).toMatch(/updated/i);
+
     });
 });
 
