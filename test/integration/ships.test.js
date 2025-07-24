@@ -28,12 +28,13 @@ describe('POST /ships', () => {
         expect(res.body.shipType).toBe(newShip.shipType);
         expect(res.body.faction).toBe(newShip.faction);
         expect(res.body.appeared).toBe(newShip.appeared);
+        console.log('Record id: ', /ships/0);
     });
 });
 
 //PUT
 describe('PUT /ships/:id', () => {
-    it('should update  ship', async () => {
+    it('should update ship', async () => {
         const updatedShip = {
             name: 'Test Ship',
             shipType: 'Type B',
@@ -53,7 +54,7 @@ describe('PUT /ships/:id', () => {
 describe('DELETE /ships/:id', () => {
     it('should delete ship', async () => {
 
-        const res = await request(app).delete('/ships/0');
+        const res = await request(app).delete('/ships/1');
 
         expect(res.statusCode).toBe(200);
         expect(res.body.message).toMatch(/deleted/i);
