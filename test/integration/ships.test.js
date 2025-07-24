@@ -32,6 +32,24 @@ describe('POST /ships', () => {
 });
 
 //PUT
+describe('PUT /ships', () => {
+    it('should update  ship', async () => {
+        const updatedShip = {
+            name: 'Test Ship',
+            shipType: 'Type B',
+            faction: 'The Bad Side',
+            appeared: 'Generic Movie (Generic Year)'
+        };
+        const res = await request(app).put('/ships/1').send(updatedShip).set('Accept', 'application/json');
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.name).toMatch(/updated/i);
+        expect(res.body.shipType).toMatch(/updated/i);
+        expect(res.body.faction).toMatch(/updated/i);
+        expect(res.body.appeared).toMatch(/updated/i);
+    });
+});
+
 
 //DELETE
 
