@@ -39,6 +39,8 @@
             
             const li = document.createElement('li');
             li.className="listItem";
+            // list is ammended with each ship in the database
+            // delete and update button is created for each ship listed
             li.innerHTML = `
                   <strong>${ship.name}</strong><br>
                   Class: ${ship.shipType}<br>
@@ -56,24 +58,29 @@
           });
         });
     }
-
+    // checks to see if submit button of form has been clicked
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // all info from form is stored in variables
       const name = document.getElementById('name').value;
       const shipType = document.getElementById('shipType').value;
       const faction = document.getElementById('faction').value;
       const appeared = document.getElementById('appeared').value;
 
       fetch('/ships', {
+        // use POST method as defined in ships.js
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 
         },
+        // variables are converted to string 
         body: JSON.stringify({name, shipType, faction, appeared})
       })
         .then(res =>res.json()) 
         .then(ships=>{
           console.log('Added:',ships);
+          // form is reset for future use
           form.reset();
           fetchShips();
         })
@@ -83,6 +90,7 @@
 
     function deleteShip(id) {
       fetch(`/ships/${id}`, {
+        // uses delete method defined in ships.js
         method: 'DELETE',
       })
       .then (res =>res.json())
@@ -90,16 +98,22 @@
       .catch(err => console.error('Delete error: ', err))
     }
 
+    // each field to be used in update is shown as a prompt
     function showUpdateForm(id, currentShipName, currentShipType, currentShipFaction, currentFirstAppeared) {
       const name = prompt('Update ship name:', currentShipName);
       const shipType = prompt('Update ship type:', currentShipType);
       const faction = prompt('Update ship faction:', currentShipFaction);
       const appeared = prompt('Update ship first appearence:', currentFirstAppeared);
 
+      // all data entered through these prompts are stored in variables
       if (name && shipType && faction && appeared !== null) {
+        // if variables are not empty then they are passed through with the current id 
         fetch(`/ships/${id}`, {
+          // uses PUT method defined in ships.js
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
+
+          // variables are converted to string
           body: JSON.stringify({ name, shipType, faction, appeared })
         })
         .then(() => fetchShips());

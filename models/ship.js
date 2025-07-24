@@ -1,5 +1,5 @@
 const db = require('../db');
-
+// define methods for dealing with one ship record
 exports.create = (name, shipType, faction, appeared, callback) => {
     const sql = `INSERT INTO items (name, shipType, faction, appeared) VALUES (?, ?, ?, ?)`;
     const params = [name, shipType, faction, appeared];
