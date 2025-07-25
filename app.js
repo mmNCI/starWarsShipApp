@@ -7,6 +7,7 @@ const app = express();
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'Public')));
+// when /ships is used, 
 app.use('/ships', shipsRouter);
 
 app.get('/', (req, res) => {
