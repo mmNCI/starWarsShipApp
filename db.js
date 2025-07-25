@@ -17,9 +17,3 @@ myDB.run(`
 `);
 
 module.exports = myDB;
-/* myDB.close((err) => {
-  if (err) {
-    return console.log(err)
-  }
-  console.log("connection closed")
-}) */

@@ -1,47 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />              
-  <title>Ships of the Star Wars Saga</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1 class="mainTitle">Ships of the STAR WARS Saga</h1>
-  
-  <section class="form">
-    <form id="shipForm">
-      <label>Name:</label>
-      <input type="text" id="name" placeholder="Name:" required /><br/>
-      <label>Class:</label>
-      <input type="text" id="shipType" placeholder="Type:" required /><br/>
-      <label>Faction:</label>
-      <input type="text" id="faction" placeholder="Faction:" required /><br/>
-      <label>First Appeared:</label>
-      <input type="text" id="appeared" placeholder="First Appeared:" required /><br/>
-      <button type="submit">Add</button>
-    </form>
-  </section>
-  <section class="list">
-  <ul id="shipList"></ul>
-  </section>
-  <script>
-    const list = document.getElementById('shipList');
-    const form = document.getElementById('shipForm');
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ships of the Star Wars Saga</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 class="mainTitle">Ships of the STAR WARS Saga</h1>
 
-    function fetchShips() {
-      fetch('/ships')
-        .then(res => res.json())
-        .then(ships => {
-          console.log("Raw data:",ships);
-          console.log("Is array: ",Array.isArray(ships));
-          list.innerHTML = '';
-          ships.forEach(ship => {
-            
-            const li = document.createElement('li');
-            li.className="listItem";
-            // list is ammended with each ship in the database
-            // delete and update button is created for each ship listed
-            li.innerHTML = `
+    <section class="form">
+      <form id="shipForm">
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="Name:" required /><br />
+        <label>Class:</label>
+        <input type="text" id="shipType" placeholder="Type:" required /><br />
+        <label>Faction:</label>
+        <input type="text" id="faction" placeholder="Faction:" required /><br />
+        <label>First Appeared:</label>
+        <input
+          type="text"
+          id="appeared"
+          placeholder="First Appeared:"
+          required
+        /><br />
+        <button type="submit">Add</button>
+      </form>
+    </section>
+    <section class="list">
+      <ul id="shipList"></ul>
+    </section>
+    <script>
+      const list = document.getElementById("shipList");
+      const form = document.getElementById("shipForm");
+
+      function fetchShips() {
+        fetch("/ships")
+          .then((res) => res.json())
+          .then((ships) => {
+            console.log("Raw data:", ships);
+            console.log("Is array: ", Array.isArray(ships));
+            list.innerHTML = "";
+            ships.forEach((ship) => {
+              const li = document.createElement("li");
+              li.className = "listItem";
+              // list is ammended with each ship in the database
+              // delete and update button is created for each ship listed
+              li.innerHTML = `
                   <strong>${ship.name}</strong><br>
                   Class: ${ship.shipType}<br>
                   Faction: ${ship.faction}<br>
@@ -54,74 +58,80 @@
                               '${ship.faction}',
                               '${ship.appeared}')">Update</button>
                   `;
-            shipList.appendChild(li);
+              shipList.appendChild(li);
+            });
           });
-        });
-    }
-    // checks to see if submit button of form has been clicked
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      // all info from form is stored in variables
-      const name = document.getElementById('name').value;
-      const shipType = document.getElementById('shipType').value;
-      const faction = document.getElementById('faction').value;
-      const appeared = document.getElementById('appeared').value;
-
-      fetch('/ships', {
-        // use POST method as defined in ships.js
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-        },
-        // variables are converted to string 
-        body: JSON.stringify({name, shipType, faction, appeared})
-      })
-        .then(res =>res.json()) 
-        .then(ships=>{
-          console.log('Added:',ships);
-          // form is reset for future use
-          form.reset();
-          fetchShips();
-        })
-        .catch(err => console.error(err));
-     
-    });
-
-    function deleteShip(id) {
-      fetch(`/ships/${id}`, {
-        // uses delete method defined in ships.js
-        method: 'DELETE',
-      })
-      .then (res =>res.json())
-      .then(() => fetchShips())
-      .catch(err => console.error('Delete error: ', err))
-    }
-
-    // each field to be used in update is shown as a prompt
-    function showUpdateForm(id, currentShipName, currentShipType, currentShipFaction, currentFirstAppeared) {
-      const name = prompt('Update ship name:', currentShipName);
-      const shipType = prompt('Update ship type:', currentShipType);
-      const faction = prompt('Update ship faction:', currentShipFaction);
-      const appeared = prompt('Update ship first appearence:', currentFirstAppeared);
-
-      // all data entered through these prompts are stored in variables
-      if (name && shipType && faction && appeared !== null) {
-        // if variables are not empty then they are passed through with the current id 
-        fetch(`/ships/${id}`, {
-          // uses PUT method defined in ships.js
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-
-          // variables are converted to string
-          body: JSON.stringify({ name, shipType, faction, appeared })
-        })
-        .then(() => fetchShips());
       }
-    }
+      // checks to see if submit button of form has been clicked
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
+        // all info from form is stored in variables
+        const name = document.getElementById("name").value;
+        const shipType = document.getElementById("shipType").value;
+        const faction = document.getElementById("faction").value;
+        const appeared = document.getElementById("appeared").value;
 
-    fetchShips();
-  </script>
-</body>
+        fetch("/ships", {
+          // use POST method as defined in ships.js
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // variables are converted to string
+          body: JSON.stringify({ name, shipType, faction, appeared }),
+        })
+          .then((res) => res.json())
+          .then((ships) => {
+            console.log("Added:", ships);
+            // form is reset for future use
+            form.reset();
+            fetchShips();
+          })
+          .catch((err) => console.error(err));
+      });
+
+      function deleteShip(id) {
+        fetch(`/ships/${id}`, {
+          // uses delete method defined in ships.js
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then(() => fetchShips())
+          .catch((err) => console.error("Delete error: ", err));
+      }
+
+      // each field to be used in update is shown as a prompt
+      function showUpdateForm(
+        id,
+        currentShipName,
+        currentShipType,
+        currentShipFaction,
+        currentFirstAppeared
+      ) {
+        const name = prompt("Update ship name:", currentShipName);
+        const shipType = prompt("Update ship type:", currentShipType);
+        const faction = prompt("Update ship faction:", currentShipFaction);
+        const appeared = prompt(
+          "Update ship first appearence:",
+          currentFirstAppeared
+        );
+
+        // all data entered through these prompts are stored in variables
+        if (name && shipType && faction && appeared !== null) {
+          // if variables are not empty then they are passed through with the current id
+          fetch(`/ships/${id}`, {
+            // uses PUT method defined in ships.js
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+
+            // variables are converted to string
+            body: JSON.stringify({ name, shipType, faction, appeared }),
+          }).then(() => fetchShips());
+        }
+      }
+
+      fetchShips();
+    </script>
+  </body>
 </html>
